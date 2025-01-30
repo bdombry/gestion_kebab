@@ -178,12 +178,14 @@ class OrderManager {
     let totalPrice = 0;
 
     this.cart.forEach((kebab, index) => {
+      let kebabTotal = 0;
+
       let extraMeatCharge = kebab.extraMeatCount * this.meatSupplementPrice;
       let extraSauceCharge = kebab.extraSauceCount * this.sauceSupplementPrice;
       let extraCheeseCharge =
         kebab.extraCheeseCount * this.cheeseSupplementPrice;
 
-      let kebabTotal =
+      kebabTotal =
         this.basePrice + extraMeatCharge + extraSauceCharge + extraCheeseCharge;
       totalPrice += kebabTotal;
 
@@ -222,6 +224,9 @@ class OrderManager {
 
     this.cartTotalDisplay.textContent = totalPrice.toFixed(2) + "€";
 
+    document.getElementById("cart-total-commande").textContent =
+      totalPrice.toFixed(2) + "€";
+
     document.querySelectorAll(".remove-kebab").forEach((button) => {
       button.addEventListener("click", (event) => {
         let index = event.target.dataset.index;
@@ -229,6 +234,12 @@ class OrderManager {
         this.updateCart();
       });
     });
+  }
+
+  validateOrder() {
+    this.cart = [];
+    this.updateCart();
+    localStorage.removeItem("cart");
   }
 
   async sendOrderToKitchen() {
